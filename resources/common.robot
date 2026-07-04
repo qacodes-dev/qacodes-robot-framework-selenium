@@ -52,3 +52,24 @@ Js Click And Wait For Element
     ${element}=    Get WebElement    ${click_locator}
     Execute Javascript    arguments[0].click();    ARGUMENTS    ${element}
     Wait Until Element Is Visible    ${expected_locator}    timeout=${TIMEOUT}
+
+Enter Text Reliably
+    [Documentation]    Set a React-controlled input's value via the native value
+    ...    setter and fire input/change, then confirm it stuck — retrying if not.
+    ...    Sauce Demo's inputs drop plain WebDriver-typed values on a slow runner
+    ...    before React has mounted; this commits the value into React's own state.
+    [Arguments]    ${locator}    ${value}
+    Wait Until Element Is Visible    ${locator}    timeout=${TIMEOUT}
+    Wait Until Keyword Succeeds    5x    1s    Set Value And Verify    ${locator}    ${value}
+
+Set Value And Verify
+    [Arguments]    ${locator}    ${value}
+    ${el}=    Get WebElement    ${locator}
+    Execute Javascript    var el = arguments[0], val = arguments[1];
+    ...    var setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    ...    setter.call(el, val);
+    ...    el.dispatchEvent(new Event('input', { bubbles: true }));
+    ...    el.dispatchEvent(new Event('change', { bubbles: true }));
+    ...    ARGUMENTS    ${el}    ${value}
+    ${actual}=    Get Value    ${locator}
+    Should Be Equal    ${actual}    ${value}

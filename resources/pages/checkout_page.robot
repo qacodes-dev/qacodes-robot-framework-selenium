@@ -44,9 +44,9 @@ Fill Customer Information
 
 Submit Customer Information
     [Arguments]    ${first_name}    ${last_name}    ${postal_code}
-    Input Text    ${FIRST_NAME_INPUT}    ${first_name}
-    Input Text    ${LAST_NAME_INPUT}    ${last_name}
-    Input Text    ${POSTAL_CODE_INPUT}    ${postal_code}
+    Enter Text Reliably    ${FIRST_NAME_INPUT}    ${first_name}
+    Enter Text Reliably    ${LAST_NAME_INPUT}    ${last_name}
+    Enter Text Reliably    ${POSTAL_CODE_INPUT}    ${postal_code}
     ${continue}=    Get WebElement    ${CONTINUE_BUTTON}
     Execute Javascript    arguments[0].click();    ARGUMENTS    ${continue}
     Wait Until Element Is Visible    ${FINISH_BUTTON}    timeout=${TIMEOUT}
