@@ -3,7 +3,6 @@ Documentation     Shared keywords used across suites: opening/closing the browse
 ...               (with a screenshot on failure) and self-healing click helpers
 ...               that retry to absorb clicks headless Chrome occasionally drops.
 Library           SeleniumLibrary
-Library           String
 Variables         ../variables/environments.py
 
 
@@ -36,34 +35,20 @@ Close Browser After Test
     Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
     Close All Browsers
 
-Click Until Visible
-    [Documentation]    Click an element and confirm the expected element appears,
-    ...    retrying the click to absorb the occasional click headless Chrome drops
-    ...    before a page has settled. A self-healing alternative to a hard sleep.
+Click And Confirm
+    [Documentation]    Click an element (any locator) and confirm the expected
+    ...    element appears, retrying until it does. Uses a scripted click on the
+    ...    resolved element: native WebDriver clicks on Sauce Demo are intermittent
+    ...    no-ops under headless CI (add-to-cart, cart link, and the React
+    ...    Checkout / Continue / Finish buttons all drop clicks on slower runners).
+    ...    A self-healing alternative to a hard sleep.
     [Arguments]    ${click_locator}    ${expected_locator}
     Wait Until Element Is Visible    ${click_locator}    timeout=${TIMEOUT}
-    Wait Until Keyword Succeeds    4x    2s
-    ...    Click Then Wait For Element    ${click_locator}    ${expected_locator}
+    Wait Until Keyword Succeeds    5x    2s
+    ...    Js Click And Wait For Element    ${click_locator}    ${expected_locator}
 
-Click Then Wait For Element
+Js Click And Wait For Element
     [Arguments]    ${click_locator}    ${expected_locator}
-    Run Keyword And Ignore Error    Click Element    ${click_locator}
-    Wait Until Element Is Visible    ${expected_locator}    timeout=${TIMEOUT}
-
-Submit By Id And Wait
-    [Documentation]    Click an ``id:``-located element via a scripted click,
-    ...    retrying until the expected element appears. Sauce Demo's checkout
-    ...    navigation buttons (Checkout / Continue / Finish) are occasionally a
-    ...    no-op under a headless WebDriver click, so a scripted click is the
-    ...    reliable path. Takes the same ``id:...`` locator the page object owns.
-    [Arguments]    ${id_locator}    ${expected_locator}
-    ${element_id}=    Remove String    ${id_locator}    id:
-    Wait Until Element Is Visible    ${id_locator}    timeout=${TIMEOUT}
-    Wait Until Keyword Succeeds    4x    2s
-    ...    Js Click Then Wait For Element    ${element_id}    ${expected_locator}
-
-Js Click Then Wait For Element
-    [Arguments]    ${element_id}    ${expected_locator}
-    Execute Javascript    var b = document.getElementById(arguments[0]); if (b) { b.click(); }
-    ...    ARGUMENTS    ${element_id}
+    ${element}=    Get WebElement    ${click_locator}
+    Execute Javascript    arguments[0].click();    ARGUMENTS    ${element}
     Wait Until Element Is Visible    ${expected_locator}    timeout=${TIMEOUT}

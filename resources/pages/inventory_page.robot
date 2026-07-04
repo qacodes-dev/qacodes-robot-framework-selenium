@@ -30,7 +30,7 @@ Add Product To Cart
     [Arguments]    ${product_slug}
     ${add}=    Set Variable    css:[data-test="add-to-cart-${product_slug}"]
     ${remove}=    Set Variable    css:[data-test="remove-${product_slug}"]
-    Click Until Visible    ${add}    ${remove}
+    Click And Confirm    ${add}    ${remove}
 
 Cart Badge Should Show
     [Arguments]    ${count}
@@ -39,4 +39,4 @@ Cart Badge Should Show
 
 Open Cart
     [Documentation]    Open the cart and confirm the cart page loaded.
-    Click Until Visible    ${CART_LINK}    ${CART_CHECKOUT_BUTTON}
+    Click And Confirm    ${CART_LINK}    ${CART_CHECKOUT_BUTTON}

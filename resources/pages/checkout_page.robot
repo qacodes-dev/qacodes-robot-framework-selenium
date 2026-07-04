@@ -30,7 +30,7 @@ Cart Should Contain Items
 
 Start Checkout
     [Documentation]    Begin checkout and confirm the customer-information step loads.
-    Submit By Id And Wait    ${CHECKOUT_BUTTON}    ${FIRST_NAME_INPUT}
+    Click And Confirm    ${CHECKOUT_BUTTON}    ${FIRST_NAME_INPUT}
 
 Fill Customer Information
     [Arguments]    ${first_name}    ${last_name}    ${postal_code}
@@ -39,11 +39,11 @@ Fill Customer Information
     Input Text    ${LAST_NAME_INPUT}    ${last_name}
     Input Text    ${POSTAL_CODE_INPUT}    ${postal_code}
     # Confirm we advanced to the order overview (the Finish button appears).
-    Submit By Id And Wait    ${CONTINUE_BUTTON}    ${FINISH_BUTTON}
+    Click And Confirm    ${CONTINUE_BUTTON}    ${FINISH_BUTTON}
 
 Finish Checkout
     [Documentation]    Submit the order and confirm the order-complete page loads.
-    Submit By Id And Wait    ${FINISH_BUTTON}    ${COMPLETE_HEADER}
+    Click And Confirm    ${FINISH_BUTTON}    ${COMPLETE_HEADER}
 
 Order Should Be Complete
     Element Text Should Be    ${COMPLETE_HEADER}    Thank you for your order!
