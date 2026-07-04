@@ -1,0 +1,26 @@
+# Robot Framework output artifacts
+results/
+output.xml
+report.html
+log.html
+selenium-screenshot-*.png
+geckodriver-*.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Real environment file — never commit secrets (keep .env.example)
+.env
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,41 @@
+name: robot
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Robot Framework suites (headless)
+        env:
+          # Chrome is preinstalled on the runner; Selenium Manager resolves the
+          # matching driver at runtime. Credentials come from repo secrets and
+          # fall back to the public demo defaults in variables/environments.py.
+          BASE_URL: ${{ secrets.BASE_URL || 'https://www.saucedemo.com' }}
+          TEST_USER: ${{ secrets.TEST_USER || 'standard_user' }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD || 'secret_sauce' }}
+        run: |
+          robot --variable HEADLESS:true --outputdir results tests/
+
+      - name: Upload Robot results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-results
+          path: results/

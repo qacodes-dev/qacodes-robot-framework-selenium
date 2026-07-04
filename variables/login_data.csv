@@ -1,0 +1,8 @@
+*** Test Cases ***;${username};${password};${expected}
+Standard user can log in;standard_user;secret_sauce;success
+Problem user can log in;problem_user;secret_sauce;success
+Locked out user is blocked;locked_out_user;secret_sauce;Epic sadface: Sorry, this user has been locked out.
+Wrong password is rejected;standard_user;wrong_password;Epic sadface: Username and password do not match any user in this service
+Unknown user is rejected;no_such_user;secret_sauce;Epic sadface: Username and password do not match any user in this service
+Missing username is rejected;;secret_sauce;Epic sadface: Username is required
+Missing password is rejected;standard_user;;Epic sadface: Password is required

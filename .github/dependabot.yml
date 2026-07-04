@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Python dependencies (Robot Framework, SeleniumLibrary, DataDriver, …)
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      pip-dependencies:
+        patterns:
+          - "*"
+
+  # GitHub Actions used by the CI workflow
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns:
+          - "*"

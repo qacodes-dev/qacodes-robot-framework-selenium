@@ -1,0 +1,7 @@
+# Pinned dependencies for the Robot Framework + SeleniumLibrary sample.
+# Selenium 4's built-in Selenium Manager resolves the browser driver at
+# runtime; webdriver-manager is kept as an explicit, documented fallback.
+robotframework==7.2.2
+robotframework-seleniumlibrary==6.7.1
+robotframework-datadriver==1.11.2
+webdriver-manager==4.0.2
