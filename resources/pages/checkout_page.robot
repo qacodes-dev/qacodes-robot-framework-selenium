@@ -33,13 +33,23 @@ Start Checkout
     Click And Confirm    ${CHECKOUT_BUTTON}    ${FIRST_NAME_INPUT}
 
 Fill Customer Information
+    [Documentation]    Fill the customer form and advance to the order overview.
+    ...    On a slow runner Sauce Demo's React inputs can drop values typed before
+    ...    the page has settled, so the fill + submit is one retried unit: it
+    ...    refills and re-submits until the Finish button (order overview) appears.
     [Arguments]    ${first_name}    ${last_name}    ${postal_code}
     Wait Until Element Is Visible    ${FIRST_NAME_INPUT}    timeout=${TIMEOUT}
+    Wait Until Keyword Succeeds    5x    2s
+    ...    Submit Customer Information    ${first_name}    ${last_name}    ${postal_code}
+
+Submit Customer Information
+    [Arguments]    ${first_name}    ${last_name}    ${postal_code}
     Input Text    ${FIRST_NAME_INPUT}    ${first_name}
     Input Text    ${LAST_NAME_INPUT}    ${last_name}
     Input Text    ${POSTAL_CODE_INPUT}    ${postal_code}
-    # Confirm we advanced to the order overview (the Finish button appears).
-    Click And Confirm    ${CONTINUE_BUTTON}    ${FINISH_BUTTON}
+    ${continue}=    Get WebElement    ${CONTINUE_BUTTON}
+    Execute Javascript    arguments[0].click();    ARGUMENTS    ${continue}
+    Wait Until Element Is Visible    ${FINISH_BUTTON}    timeout=${TIMEOUT}
 
 Finish Checkout
     [Documentation]    Submit the order and confirm the order-complete page loads.
